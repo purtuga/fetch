@@ -1,3 +1,51 @@
+# Changes from original
+
+The original library was changed to support the following:
+
+-   Converted to UMD support.
+-   Module returns a `function` that contains, as static properties, the respective polyfill: `Headers`, `Request`, `Response` and `fetch`. Calling this function directly with an object on input will add those polyfills components to the given object.
+-   Support for `.abort()`
+-   Support for `onProgress` input options. Ability to monitor content being uploaded
+
+These items above make this version of the library non-standard. A little more about the change:
+
+## UMD Support
+
+Adds support for AMD (`define`), `module.exports` as well as polyfill of global object. When global object is polyfilled, Global object will also have a property called `fetchPolyfill` which holds the functionality of this library (case you would like to use it instead of the version provided nativelly).
+
+## Support for `.abort`
+
+The promise returned from `.fetch()` will have an additional method called `abort` that can be called to abort an inflight request.
+
+## Support for `onProgress`
+
+An input option of `onProgress` can be defined to monitor upload activity. Option should be a `Function` whic is called every time the `xhr.upload` object triggers an `progress` event.
+
+
+## Examples
+
+```
+defined(["fetch"], function(fetchPolyfill){
+    var fetch = fetchPolyfill.fetch;
+    ...
+})
+```
+
+Load in the browser where .fetch() API alrady exists:
+
+```
+window.fetchPolyfill.fetch();// call polyfill .fetch()
+```
+
+Add the fetch method and associated Classes to a given object. Use it to extend your classes.
+
+```
+var myObject = {};
+window.fetchPolyfill(myObject);
+```
+
+____
+
 # window.fetch polyfill
 
 This project adheres to the [Open Code of Conduct][code-of-conduct]. By participating, you are expected to uphold this code.
